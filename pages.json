@@ -1,0 +1,109 @@
+{
+  "pages": [{
+    "path": "pages/home/home",
+    "style": {}
+  },{
+    "path": "pages/my/my",
+    "style": {}
+  }    ,{
+            "path" : "pages/add/add",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/message/message",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
+  "subPackages": [{
+    "root": "subpkg",
+    "pages": [{
+      "path": "goods_detail/goods_detail",
+      "style": {}
+    },{
+        "path" : "goods_list/goods_list",
+        "style" : {}
+      }    ,{
+                    "path" : "my_favorites/my_favorites",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "checkout/checkout",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "address_detail/address_detail",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
+  }],
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "二手平台",
+    "navigationBarBackgroundColor": "#C00000",
+    "backgroundColor": "#FFFFFF",
+    "usingComponents": {
+      "van-grid": "/wxcomponents/vant/grid/index",
+      "van-grid-item": "/wxcomponents/vant/grid-item/index",
+      "van-button": "/wxcomponents/vant/button/index",
+      "van-field": "/wxcomponents/vant/field/index",
+      "van-uploader": "/wxcomponents/vant/uploader/index",
+      "van-icon": "/wxcomponents/vant/icon/index",
+      "van-radio": "/wxcomponents/vant/radio/index",
+      "van-radio-group": "/wxcomponents/vant/radio-group/index",
+      "van-tag": "/wxcomponents/vant/tag/index"
+    }
+  },
+  "tabBar": {
+    "selectedColor": "#C00000",
+    "list": [{
+        "pagePath": "pages/home/home",
+        "text": "",
+        "iconPath": "static/tab_icons/home.png",
+        "selectedIconPath": "static/tab_icons/home-active.png"
+      },
+      {
+        "pagePath": "pages/add/add",
+        "text": "",
+        "iconPath": "static/tab_icons/add1.png",
+        "selectedIconPath": "static/tab_icons/add-active.png"
+      },
+      {
+        "pagePath": "pages/message/message",
+        "text": "",
+        "iconPath": "static/tab_icons/message.png",
+        "selectedIconPath": "static/tab_icons/message-active.png"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "text": "",
+        "iconPath": "static/tab_icons/my.png",
+        "selectedIconPath": "static/tab_icons/my-active.png"
+      }
+    ]
+  }
+}

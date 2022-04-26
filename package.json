@@ -15,6 +15,10 @@
   "license": "ISC",
   "dependencies": {
     "@escook/request-miniprogram": "^0.2.1",
-    "@vant/weapp": "^1.10.2"
+    "@vant/weapp": "^1.10.2",
+    "weapp.socket.io": "^3.0.0"
+  },
+  "--minimize": {
+    "dev:mp-weixin": "cross-env NODE_ENV=development UNI_PLATFORM=mp-weixin vue-cli-service uni-build --watch --minimize"
   }
 }

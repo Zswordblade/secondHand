@@ -10,30 +10,48 @@
 </template>
 
 <script>
-  import { mapMutations } from 'vuex'
+  import { mapMutations, mapState } from 'vuex'
   export default {
     name:"my-login",
     props:['code'],
     data() {
       return {
+        userInfo: {}
       };
+    },
+    computed:{
+      // ...mapState('user', ['userinfo','token'])
     },
     methods:{
       ...mapMutations('user',['updateUserInfo','updateToken']),
+      async setUserInfo(user, token) {
+        // console.log(user)
+        const obj = {
+          name: user.nickName,
+          avr_url: user.avatarUrl,
+          userID: token
+        }
+        const res  = await uni.$http.post('/api/setUserInfo',obj)
+        if (res.statusCode !== 200) return uni.$showMsg()
+        if (res.data.msg === 'true') 
+          this.updateToken(token)
+        else 
+          console.log(res.data.err)
+      },
       async goLogin(e){
-            const context = this
-            uni.getUserProfile({
-              desc:'用于完善个人信息',
-              lang:'zh_CN',
-              success(user){
-                context.updateUserInfo(user.userInfo)
-              },
-              fail(){
-                uni.$showMsg('若需使用请授权')
-              }
-            })
-            const {data:res} = await uni.$http.get('/api/getSession',{code:this.code});
-            context.updateToken(res.data.openid)
+        const {data:res} = await uni.$http.get('/api/getSession',{code:this.code});
+        const context = this
+        uni.getUserProfile({
+          desc:'用于完善个人信息',
+          lang:'zh_CN',
+          success(user){
+            context.setUserInfo(user.userInfo, res.data.openid)
+            context.updateUserInfo(user.userInfo)
+          },
+          fail(){
+            uni.$showMsg('若需使用请授权')
+          }
+        })
       },
     }
   }

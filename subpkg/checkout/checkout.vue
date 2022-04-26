@@ -34,8 +34,8 @@
 
 		<view class="order-total">
 			<view class="l">实付：￥{{freightPrice+goods_info.price}}</view>
-      <view class="r">取消付款</view>
-			<view class="r" @tap="submitOrder">去付款</view>
+      <view class="r" @click="submitOrder(0)">取消付款</view>
+			<view class="r" @click="submitOrder(1)">去付款</view>
 		</view>
 	</view>
 </template>
@@ -66,15 +66,17 @@
 				couponDesc: '',
 				couponCode: '',
 				buyType: '',
-        goods_info:{}
+        goods_info:{},
+        goodsID: null
 			}
 		},
     computed:{
-      ...mapState('address',['default_add'])
+      ...mapState('address',['default_add']),
+      ...mapState( 'user', ['token'])
     },
     onLoad(options) {
       const goods_id = options.id 
-      // this.goodsID = options.id
+      this.goodsID = options.id
       this.getGoodsDetail(goods_id)
     },
     onShow(){
@@ -83,7 +85,7 @@
 		methods: {
       async getGoodsDetail(id) {
         const res = await uni.$http.get('/api/goodsDetail',{id})
-        console.log(res)
+        // console.log(res)
         if(res.statusCode !== 200)
           return uni.$showMsg()
         this.goods_info = res.data[0]
@@ -94,6 +96,22 @@
         uni.navigateTo({
           url:'../address_detail/address_detail'
         })
+      },
+      async submitOrder(type) {
+        if(!this.default_add) {
+          return uni.$showMsg('请先选择地址')
+        }
+        const res = await uni.$http.post('/api/makeOrder',{
+          customer:this.token,
+          order_status:type,
+          goodsID:this.goodsID
+        })
+        // console.log(res)
+        if(res.data.msg === 'true') {
+          uni.switchTab({
+            url:'/pages/home/home'
+          })
+        }
       },
 		}
 	}
@@ -181,8 +199,9 @@
     margin: 0 5px; 
 		width: 233rpx;
 		height: 100rpx;
-		background: #b4282d;
-		border: 1px solid #b4282d;
+		background: #ff3842;
+		border: 1px solid #ff3842;
+    border-radius: 30px;
 		line-height: 100rpx;
 		text-align: center;
 		color: #fff;

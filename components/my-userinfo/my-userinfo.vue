@@ -17,17 +17,17 @@
               <text>收藏</text>
             </view>
           </navigator>
-          <view class="panel-item">
+          <view class="panel-item" @click="toMyGoods">
             <image src="/static/my-icons/sell.png" class="icon"></image>
             <text>在售二手</text>
           </view>
-          <view class="panel-item">
+      <!--    <view class="panel-item">
             <image src="/static/my-icons/icon2.png" class="icon"></image>
             <text>待收货</text>
-          </view>
-          <view class="panel-item">
+          </view> -->
+          <view class="panel-item" @click="toOrderList">
             <image src="/static/my-icons/icon4.png" class="icon"></image>
-            <text>已完成订单</text>
+            <text>订单</text>
           </view>
         </view>
       </view>
@@ -93,6 +93,16 @@
           this.addTocart({goodsid:item.goodsID})
         })
       },
+      toOrderList(){
+        uni.navigateTo({
+          url:'../../subpkg/order_list/order_list?token='+this.token
+        })
+      },
+      toMyGoods() {
+        uni.navigateTo({
+          url:'../../subpkg/my_goods_list/my_goods_list?token='+this.token
+        })
+      }
     }
   }
 </script>

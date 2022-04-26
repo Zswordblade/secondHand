@@ -29,42 +29,8 @@
     				}
     			})
     		},
-    // methods:{
-    //   async goLogin(e){
-    //         uni.getUserProfile({
-    //           desc:'用于完善个人信息',
-    //           lang:'zh_CN',
-    //           success(user){
-    //             console.log(user);
-    //           },
-    //           fail(){
-    //             uni.$showMsg('若需使用请授权')
-    //           }
-    //         })
-    //         const res = await uni.$http.get('/api/getSession',{code:this.code});
-    //         console.log(res);
-    //   },
-      // getSetting() {
-      //   return new Promise(function(resolve, reject) {
-      //     uni.getSetting({
-      //       success: function(res) {
-      //         if (res.authSetting['scope.userInfo']) {
-      //           console.log('存在');
-      //           resolve(true);
-      //         } else {
-      //           console.log('不存在');
-      //           resolve(false);
-      //         }
-      //       }
-      //     })
-      //   }).catch((e) => {
-      //     console.log(e)
-      //   });
-      // }
-    
   }
 </script>
 
 <style lang="scss">
-
 </style>

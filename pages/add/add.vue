@@ -1,7 +1,7 @@
 <template>
   <view>
       <van-field
-        :value="value"
+        :value="queryForm.title"
         type="textarea"
         placeholder="请输入信息"
         autosize
@@ -18,7 +18,7 @@
         </view>
       </view>
       <van-field
-          type="digit"
+          type="number"
           label="价格"
           label-class="price-label"
           :value="queryForm.price"
@@ -31,7 +31,7 @@
             <van-radio name="1" checked-color="#ff0000" custom-class="custom">数码产品</van-radio>
             <van-radio name="2" checked-color="#ff0000" custom-class="custom">家具</van-radio>
             <van-radio name="3" checked-color="#ff0000" custom-class="custom">衣服鞋子</van-radio>
-            <van-radio name="4" checked-color="#ff0000" custom-class="custom">化妆品</van-radio>
+            <van-radio name="4" checked-color="#ff0000" custom-class="custom">二手车</van-radio>
           </van-radio-group>
         </view>
         <view class="btn-box">
@@ -53,7 +53,8 @@
         price:'',
         fileList:[],
         index:0,
-        picUrl:''
+        picUrl:'',
+        loading: false
       }
     },
     onLoad(){
@@ -65,6 +66,17 @@
     },
     computed:{
       ...mapState('user',['token'])
+    },
+    watch: {
+      loading(newValue) {
+        if(newValue) {
+          uni.showLoading({
+            title: '加载中'
+          })
+        } else {
+          uni.hideLoading()
+        }
+      }
     },
     methods: {
       deleteHandler(e){
@@ -82,6 +94,11 @@
         this.queryForm.price=e.detail
       },
       onCommitPic(){
+        if(this.fileList.length === 0) {
+          uni.$showMsg('请先选择图片',1500,'error')
+          return 
+        }
+        this.loading = true
         const context = this
         if(this.fileList.length>0){
           this.fileList.forEach(function(item){
@@ -94,9 +111,11 @@
                 context.picUrl=context.picUrl+res.data
                 console.log(context.picUrl)
                 uni.$showMsg('图片上传成功')
+                  context.loading = false
               },
                fail(res) {
                   uni.$showMsg('图片上传失败')
+                  context.loading = false
                }
             })
           })
@@ -115,6 +134,7 @@
         else if(!this.queryForm.sort)
           uni.$showMsg("请选中商品分类")
         else{
+          this.loading = true
           const res = await uni.$http.post('/api/addGood',{
             title: this.queryForm.title,
             price: this.queryForm.price,
@@ -124,10 +144,15 @@
           })
           if(res.data.msg === "true"){
             uni.$showMsg('上传成功')
+            this.queryForm = {}
+            this.value = null
+            this.fileList = []
+            this.picUrl = ''
           } else {
             uni.$showMsg('上传失败')
             console.log(res)
           }
+          this.loading = false
         }
       }
     }

@@ -3,7 +3,7 @@
 
     <!-- 分类导航区域 -->
    <view class="nav-list">
-      <view class="nav-item" v-for="(item, i) in navList" :key="i" @click="navClickHandler(item)">
+      <view class="nav-item" v-for="(item, i) in navList" :key="i" @click="navClickHandler(i+1)">
         <image :src="item.img" class="nav-img"></image>
         <p>{{item.title}}</p>
       </view>
@@ -17,6 +17,7 @@
                 <text class="van-ellipsis">{{item.title}}</text>
           </van-grid-item>
         </van-grid>
+        <uni-load-more :status="loading" :contentText="contentObj" @clickLoadMore="onLoadMore" style="text-align: center;"></uni-load-more>
     </view>
   </view>
 </template>
@@ -26,20 +27,27 @@
   export default {
     data() {
       return {
-        // 这是轮播图的数据列表
         swiperList: [],
-        // 分类导航的数据列表
         navList: [],
-        // 楼层的数据
-        floorList: []
+        floorList: [],
+        pageNum: 0,
+        loading: 'more',
+        contentObj: {
+          contentdown: "显示更多",
+          contentrefresh: "正在加载...",
+          contentnomore: "没有更多数据了"
+        },
+        activeName: null
       };
     },
     computed:{
       ...mapState('user',['token'])
     },
     onLoad() {
-      // 调用方法，获取轮播图的数据
       this.getNavList()
+      this.getFloorList()
+    },
+    onShow() {
       this.getFloorList()
     },
     methods: {
@@ -55,18 +63,24 @@
         // console.log(res.data)
         this.navList = res.data
       },
-      navClickHandler(item) {
-        if (item.name === '分类') {
-          uni.switchTab({
-            url: '/pages/cate/cate'
-          })
-        }
+      navClickHandler(index) {
+        uni.navigateTo({
+          url:'../../subpkg/goods_list/goods_list?sort=' + index
+        })
       },
-      // 获取首页楼层数据的方法
+      // 获取商品列表的方法
       async getFloorList() {
-        const res  = await uni.$http.get('/api//home/floordata')
+        let data = {
+          pageNum: this.pageNum
+        }
+        const res  = await uni.$http.get('/api/home/floordata',data)
         if (res.statusCode !== 200) return uni.$showMsg()
-        this.floorList = res.data
+        if (this.pageNum >0) {
+          this.floorList = [...this.floorList,...res.data.results]
+          // console.log(this.floorList)
+        } else {
+          this.floorList = res.data.results
+        }
         this.floorList.forEach(item=>{
           item.picUrl = uni.$http.baseUrl+'/'+item.pic_url.split('./')[1]
         })
@@ -81,6 +95,22 @@
           uni.$showMsg('请先登录')
         }
       },
+      async onLoadMore(e) {
+        console.log(e.detail)
+        this.loading = 'loading'
+        this.pageNum++
+        const length = this.floorList.length
+        await this.getFloorList()
+        if (this.floorList.length === length) {
+          setTimeout(() => {
+            this.loading = 'noMore'
+          },300)
+        } else {
+          setTimeout(() => {
+            this.loading = 'more'
+          },300)
+        }
+      }
     }
   }
 </script>

@@ -7,26 +7,17 @@ export default {
     cart: []
   }),
   actions: {
-    async collect(state,goods){
-      const res = await uni.$http.get('/api/collectGoods',goods)
-      // console.log(res)
-      if(res.statusCode !== 200)
-        return uni.$showMsg()
-      if(res.data.msg === 'true')
-        this.commit('favor/addTocart',goods)
-      else return uni.$showMsg('收藏失败')
-    }
   },
   // 模块的 mutations 方法
   mutations: {
-    addTocart(state,goods){
-       // for(let i=0;i<state.cart.length;i++){
-       //   if(goods.id===state.cart[i].id)
-       //    return
-       //  }
-       //  state.cart.push(goods)
+    addTocart(state,goods) {
        if(!state.cart.includes(goods.goodsid))
-        state.cart.push(goods.goodsid)
+        state.cart.push(Number(goods.goodsid))
+    },
+    subFromCart(state, data) {
+      state.cart = state.cart.filter(item => {
+        return item !== Number(data.goodsid)
+      })
     }
   },
 

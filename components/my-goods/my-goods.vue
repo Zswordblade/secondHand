@@ -54,7 +54,7 @@
       }
 
       .goods-price {
-        margin-left: 400rpx;
+        margin-left: 50rpx;
         font-size: 20px;
         color: #c00000;
       }
